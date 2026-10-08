@@ -1,0 +1,101 @@
+== Q3.1  Hospitals within 2 km of (72.8777, 19.0760), nearest first
+  id   |                               name                                | distance_m 
+-------+-------------------------------------------------------------------+------------
+ 15453 | New Noor Hospital                                                 |       39.4
+  6754 | Habib Hospital                                                    |      354.6
+  6747 | Muskaan Hospital                                                  |      387.1
+  8100 | bhabha hospital                                                   |      569.2
+  7614 | Bhabha Hospital                                                   |      572.2
+  2162 | Kurla Nursing Room                                                |      653.8
+  5979 | Despande Nursing Home                                             |      673.2
+  6730 | Buddh Colony BMC Hospital                                         |      674.2
+ 15438 | City Hospital and Research Centre                                 |      719.9
+  2290 | arpan nursing home                                                |      732.7
+  8101 | Alphine life solutions general hospital                           |      791.9
+  6765 | Alphine Life Solutions General Hospital                           |      792.6
+  6777 | Masoom Child Hospital                                             |      795.9
+  3393 | Kurla Municipal Hospital                                          |      834.6
+  6728 | Subhash Hospital                                                  |      852.5
+ 15224 | CritiCare Asia Hospital, Kurla                                    |      887.8
+  5412 | Sushila Hospital-Icu and Maternity                                |      887.9
+  7208 | Sapna Health Care Centre Pvt Ltd                                  |     1143.6
+  2293 | arayan hospital                                                   |     1441.9
+  2286 | v care hospital intensive& unit care                              |     1451.3
+  5434 | Aryan Hospital and Iccu - Kurla-Mumbai                            |     1520.6
+  5420 | V Care Hospital and Icu                                           |     1527.4
+  6225 | Prarushi Healthcare Pvt Ltd / Kusumesh Chandra Maternity Hospital |     1534.1
+  8099 | Fauziya hospital                                                  |     1539.0
+  2292 | fauziya hospital                                                  |     1541.1
+  6301 | Kalina Hospital                                                   |     1560.8
+  6729 | Lions Club Medical Centre General Hospital                        |     1689.6
+  5463 | Durga Maternity and Surgical Nursing Home                         |     1776.2
+(28 rows)
+
+== Q3.2  Restaurants within 1 km of the same point
+  id   |               name                |            cuisine             | distance_m 
+-------+-----------------------------------+--------------------------------+------------
+  9255 | Karizma Dhaba                     |                                |      119.5
+ 15824 | Deluxe Restaurant                 |                                |      405.2
+  9206 | Istanbul Darbar                   |                                |      416.6
+  2140 | Sahara                            | regional                       |      468.9
+  2141 | Skyway                            | regional                       |      628.2
+  2158 | Hotel Ravi Pure Veg               | South_Indian                   |      720.7
+  9269 | Sunlight Restaurant               |                                |      759.7
+  9240 | SHAHI Dessert and Fast Food Juice |                                |      860.8
+  4657 | Burn Bar and Kitchen              | mexican;italian;chinese;indian |      881.3
+(9 rows)
+
+== Q3.3  Schools within 3 km of the same point (count and 10 closest)
+ schools_within_3km 
+--------------------
+                 27
+(1 row)
+
+  id   |                  name                   | distance_m 
+-------+-----------------------------------------+------------
+  6887 | Orchids The International School, Kurla |      915.5
+ 16410 | Mogli Gardern                           |     1012.9
+ 16347 | Holy Cross quaterangle                  |     1107.7
+ 16023 | Holy cross centenary Grounds            |     1144.1
+ 15949 | American School of Bombay               |     1172.5
+  2615 | American School of Bombay               |     1181.0
+ 15956 | Dhirubhai Ambani International School   |     1278.9
+ 15928 | Municipal School                        |     1899.6
+ 15927 | Adarsha Vidyalaya                       |     1920.3
+ 16277 | Tilak Nagar Municipal School            |     2000.3
+(10 rows)
+
+== Q3.4  ATMs within 500 m of Andheri railway station
+  id   |         atm         |      operator       | distance_m 
+-------+---------------------+---------------------+------------
+  9411 | Indian Bank         | Indian Bank         |      110.8
+ 11935 |                     |                     |      129.1
+  2694 | State Bank of India | State Bank of India |      202.3
+  2692 |                     |                     |      291.5
+(4 rows)
+
+== Q3.5  All places within a 300 m radius of the point, by category
+     category     | places 
+------------------+--------
+ fuel             |      4
+ hotel            |      4
+ place_of_worship |      4
+ bank             |      3
+ toilets          |      3
+ atm              |      2
+ cinema           |      2
+ locality         |      2
+ bus_station      |      1
+ clothes          |      1
+ fast_food        |      1
+ hospital         |      1
+ restaurant       |      1
+ supermarket      |      1
+(14 rows)
+
+== Q3.6  Why ::geography? Distance between Churchgate and Mumbai CSMT stations
+ geometry_distance_degrees | geography_distance_m | utm43n_distance_m 
+---------------------------+----------------------+-------------------
+                  0.009964 |               1063.3 |            1063.6
+(1 row)
+

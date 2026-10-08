@@ -1,0 +1,15 @@
+.DS_Store
+# OSM extracts: the final 20 MB Mumbai extract is committed for reproducibility
+# (ODbL, see README). The intermediate buffer and partial downloads are not.
+data/raw/*.osm.pbf
+!data/raw/mumbai.osm.pbf
+data/raw/*.part
+data/raw/stream.*
+# Project-local PostgreSQL cluster
+data/pgdata/
+data/postgresql.log
+data/build.log
+data/port
+# Web front end virtualenv
+frontend/.venv/
+__pycache__/

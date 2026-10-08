@@ -1,0 +1,123 @@
+== Q2.1  Restaurants inside Bandra West (ST_Within point-in-polygon)
+  id   |           name           | cuisine  
+-------+--------------------------+----------
+ 11131 | 1441 Restaurant          | pizza
+ 10055 | 5 Spice                  | chinese
+  8841 | Arbab                    | lebanese
+  2743 | Balaji Restaurant        | 
+ 16039 | Bandra Born              | 
+  3021 | Bombay Salad Co.         | 
+  8826 | Bombay Taco Company      | tex-mex
+  9337 | Border Bean Barbecue     | 
+ 11596 | Cafe Delight Restaurant  | 
+ 14210 | Café Mommy Joon          | persian
+  9326 | Carter Road Social       | 
+ 10778 | China Gate               | chinese
+ 11152 | Copper Chimney           | 
+  1605 | Dakshin                  | 
+  2809 | Deepa Bar and Restaurant | indian
+  8907 | Dimsum Wu                | chinese
+ 13669 | Donna Deli               | asian
+  3759 | Elco Restaurant          | 
+  3791 | Ferry Wharf              | seafood
+ 11614 | Four Chopsticks          | chinese
+ 10777 | GOH JIA TING             | seafood
+ 11580 | Gokul Refreshments       | 
+   332 | Good Luck Restaurant     | 
+ 18315 | Gracias Granny           | mexican
+  8840 | Hakkasan                 | chinese
+(25 rows)
+
+== Q2.2  Hospitals in Andheri West (inside the K/W Ward polygon)
+  id   |                                   name                                    
+-------+---------------------------------------------------------------------------
+  7613 | AL Kaleskar Hospital
+  6084 | Akanksha Maternity and Surgical Hospital
+ 10520 | Auro Skin Clinic
+  7612 | Axis Orthopaedic Hospital
+  2376 | Bellevue Multispeciality Hospital
+  3395 | Bharatiya Arogya Nidhi Sheth Kantilal C. Parikh General Hospital
+  6001 | Bses Mg Hospital (Managed By)Brahma Kumari Global Hospital and Res Center
+  5349 | Centre For Sight, Juhu
+  6727 | City Hospital
+  7645 | Clear Vision Eye Care
+  5558 | Criticare Multispeciality Hospital and Research Centre
+  6058 | Diamond Hospital
+  5822 | Doctor Eye Hospital
+  5984 | Doctor M.I. Doongerwala
+  5646 | Doctor Pareek's Deafness Clinic and ENT Hospital
+  5826 | Dr Eye Institute Pvt Ltd
+  1483 | Dr Manveen Gill
+  6154 | Dr Sanjay Soni Dental Clinic
+  6138 | Dr Shah Hospital
+  5586 | Dr Telangs Dhanvantari Hospital
+ 17448 | Dr. Cooper Hospital
+  5920 | Dr. Joshi Surgical and Maternity Hospital
+  5123 | Dr. R. N. Cooper General Hospital Blood Bank
+  5712 | Dr. Vaidya Eye Hospital
+  6011 | Eva Medicare Center - andheri
+(25 rows)
+
+== Q2.3  Number of schools, hospitals and restaurants in Andheri East (K/E Ward)
+  category  | places 
+------------+--------
+ hospital   |     62
+ restaurant |     59
+ school     |     27
+(3 rows)
+
+== Q2.4  Everything inside Bandra West, by category (top 15)
+     category     | places 
+------------------+--------
+ restaurant       |    104
+ clothes          |     95
+ bank             |     76
+ cafe             |     67
+ bench            |     61
+ place_of_worship |     61
+ jewelry          |     54
+ hairdresser      |     51
+ fast_food        |     44
+ atm              |     41
+ convenience      |     33
+ locality         |     32
+ hospital         |     27
+ pharmacy         |     25
+ school           |     25
+(15 rows)
+
+== Q2.5  Hospitals per square km in each BMC ward (spatial aggregation)
+   ward   | hospitals | area_km2 | hospitals_per_km2 
+----------+-----------+----------+-------------------
+ G/N Ward |        40 |      8.7 |              4.60
+ D Ward   |        33 |      8.1 |              4.06
+ E Ward   |        28 |      7.4 |              3.78
+ H/W Ward |        34 |      9.0 |              3.78
+ B Ward   |         9 |      2.7 |              3.38
+ M/W Ward |        55 |     16.9 |              3.25
+ L Ward   |        51 |     15.7 |              3.25
+ K/W Ward |        76 |     24.1 |              3.16
+ K/E Ward |        62 |     24.0 |              2.59
+ R/S Ward |        44 |     18.3 |              2.40
+ A Ward   |        22 |     10.0 |              2.20
+ F/N Ward |        27 |     12.8 |              2.10
+ R/N Ward |        28 |     13.9 |              2.02
+ N Ward   |        60 |     31.1 |              1.93
+ F/S Ward |        19 |      9.9 |              1.92
+ G/S Ward |        17 |      9.2 |              1.85
+ H/E Ward |        21 |     12.4 |              1.69
+ R/C Ward |        77 |     49.3 |              1.56
+ C Ward   |         3 |      1.9 |              1.55
+ P/N Ward |        67 |     46.5 |              1.44
+ S Ward   |        47 |     33.8 |              1.39
+ T Ward   |        57 |     43.6 |              1.31
+ P/S Ward |        31 |     25.2 |              1.23
+ M/E Ward |        23 |     40.2 |              0.57
+(24 rows)
+
+== Q2.6  ST_Within vs ST_Contains vs ST_Covers for Mumbai City District
+         name         | within | contains | covers 
+----------------------+--------+----------+--------
+ Mumbai City District |   3706 |     3706 |   3709
+(1 row)
+

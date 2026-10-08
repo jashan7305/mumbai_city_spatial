@@ -1,0 +1,353 @@
+== Q1.1  Project tables/views: geometry type, SRID and row count
+      relation       | geometry_type | srid |  rows  
+---------------------+---------------+------+--------
+ spatial_data.areas  | MULTIPOLYGON  | 4326 | 193370
+ spatial_data.places | POINT         | 4326 |  18517
+ spatial_data.roads  | LINESTRING    | 4326 |  92238
+(3 rows)
+
+== Q1.2  SRID of the raw osm2pgsql import (source) vs the clean model
+          relation          | srid 
+----------------------------+------
+ raw_osm.planet_osm_point   | 3857
+ raw_osm.planet_osm_line    | 3857
+ raw_osm.planet_osm_polygon | 3857
+ spatial_data.places        | 4326
+(4 rows)
+
+== Q1.3  Point-of-interest categories that actually exist (>= 75 records)
+     category     | places | named 
+------------------+--------+-------
+ hospital         |   1243 |  1200
+ locality         |   1157 |  1157
+ restaurant       |   1140 |  1003
+ place_of_worship |   1103 |   851
+ parking_entrance |    797 |     0
+ bank             |    734 |   699
+ school           |    710 |   625
+ fast_food        |    602 |   507
+ parking          |    550 |    60
+ clothes          |    546 |   517
+ clinic           |    528 |   506
+ cafe             |    508 |   454
+ toilets          |    388 |    67
+ bench            |    375 |    40
+ hotel            |    352 |   305
+ atm              |    300 |   124
+ pharmacy         |    221 |   183
+ supermarket      |    218 |   200
+ waste_basket     |    215 |   105
+ railway_station  |    203 |   196
+ fuel             |    202 |   152
+ college          |    199 |   189
+ convenience      |    196 |   151
+ hairdresser      |    183 |   164
+ jewelry          |    160 |   151
+ beauty           |    148 |   141
+ police           |    135 |   112
+ bus_station      |    129 |   112
+ shelter          |    117 |    12
+ artwork          |    114 |    70
+ bakery           |    109 |    92
+ marketplace      |     96 |    77
+ ice_cream        |     95 |    83
+ bar              |     91 |    74
+ ticket           |     88 |    35
+ mall             |     86 |    81
+ electronics      |     84 |    71
+ vending_machine  |     84 |     9
+ taxi             |     83 |    49
+ dentist          |     82 |    77
+ mobile_phone     |     82 |    77
+ cinema           |     81 |    75
+ stationery       |     81 |    64
+ shoes            |     80 |    79
+ drinking_water   |     78 |    30
+ hostel           |     78 |    51
+ doctors          |     77 |    71
+ post_office      |     77 |    62
+ optician         |     75 |    74
+(49 rows)
+
+== Q1.4  All hospitals in the Mumbai extract (count, then first 15 by name)
+ hospitals 
+-----------
+      1243
+(1 row)
+
+  id   |                   name                   |      location_lon_lat      
+-------+------------------------------------------+----------------------------
+  5770 | A Care Orthopaedic and General Hospital  | POINT(72.870278 19.28449)
+  7613 | AL Kaleskar Hospital                     | POINT(72.812238 19.136067)
+  1990 | AMAN                                     | POINT(72.918542 19.052455)
+  6215 | AR Hospital Orthopaedic & ICU            | POINT(72.846468 19.183692)
+  6608 | Aadhar Hospital                          | POINT(72.963454 19.196372)
+  6191 | Aaditya Netralaya                        | POINT(72.959433 19.169136)
+  5810 | Aakashdeep Hospital and I.C.U            | POINT(73.004626 19.101379)
+  6614 | Aarambh Hospital                         | POINT(72.980195 19.205935)
+ 16316 | Aarey Hospital                           | POINT(72.875884 19.147411)
+ 16427 | Aarogyam Multispeciality Hospital, Thane | POINT(72.976887 19.18416)
+  5563 | Aasha Cancer Hospital and Children First | POINT(72.970673 19.193409)
+  6705 | Aashapuri Hospital                       | POINT(72.866563 19.2495)
+  6682 | Aastha Maternity                         | POINT(72.864334 19.181414)
+  6590 | Aayush Hospital                          | POINT(72.94022 18.878537)
+  6852 | Aayush Hospital                          | POINT(72.854812 19.040315)
+(15 rows)
+
+== Q1.5  Restaurants with their OSM cuisine tag (first 15 by name)
+ restaurants 
+-------------
+        1140
+(1 row)
+
+  id   |                  name                  |    cuisine     |      location_lon_lat      
+-------+----------------------------------------+----------------+----------------------------
+ 11131 | 1441 Restaurant                        | pizza          | POINT(72.834723 19.062096)
+ 14459 | 14°41° Pizzeria                        | pizza          | POINT(72.831642 19.148695)
+ 17143 | 27 Yard                                |                | POINT(72.96949 19.235906)
+ 10055 | 5 Spice                                | chinese        | POINT(72.832391 19.068011)
+ 11912 | 7 Hills Resto + Bar                    |                | POINT(72.821448 19.130069)
+  9676 | 7th Heaven Girgaon                     |                | POINT(72.817219 18.957145)
+ 11833 | 99 Pancakes                            | pancake        | POINT(72.841693 19.039951)
+  4584 | A Rama Nayak's Shrikrishna Boarding    |                | POINT(72.850662 19.0274)
+  9806 | Aai Baba Sweet And Snacks              | dessert        | POINT(73.016854 19.03205)
+  1885 | Abhinandan                             | indian;chinese | POINT(72.915192 19.096148)
+ 16578 | Abhinandan Family Restaurant and bar   |                | POINT(72.848057 19.04559)
+  8169 | Achija                                 |                | POINT(72.94331 19.171224)
+ 12125 | Achija                                 | indian         | POINT(72.969894 19.19021)
+  7431 | Achija Restaurant                      |                | POINT(72.905456 19.080169)
+  9581 | Achija veg restaurant Kandivali branch |                | POINT(72.843446 19.205724)
+(15 rows)
+
+== Q1.6  Suburban railway stations (Western/Central/Harbour/Trans-Harbour lines)
+  id   |           name            |   lat    |   lon    
+-------+---------------------------+----------+----------
+ 16370 | Airoli                    | 19.15851 | 72.99940
+  4097 | Andheri                   | 19.11970 | 72.84642
+ 16363 | Baman-Dongri              | 18.97517 | 73.02439
+  1680 | Bandra                    | 19.05498 | 72.84022
+ 14812 | Bandra Terminus           | 19.06239 | 72.84092
+  2124 | Bhandup                   | 19.14276 | 72.93765
+     3 | Bhivandi Road             | 19.26887 | 73.04631
+  2192 | Borivali                  | 19.22907 | 72.85736
+  1681 | Byculla                   | 18.97662 | 72.83279
+  8900 | CBD Belapur               | 19.01901 | 73.03913
+  1682 | Charni Road               | 18.95184 | 72.81824
+  1622 | Chembur                   | 19.06263 | 72.90114
+  2235 | Chinchpokli               | 18.98720 | 72.83267
+  1700 | Chuna Bhatti              | 19.05177 | 72.86910
+  2669 | Churchgate                | 18.93548 | 72.82717
+   591 | Cotton Green              | 18.98719 | 72.84390
+  1614 | Currey Road               | 18.99375 | 72.83286
+  1683 | Dadar                     | 19.01738 | 72.84303
+  1684 | Dadar                     | 19.01923 | 72.84285
+     4 | Dahisar                   | 19.24936 | 72.85963
+ 16707 | Digha Gaon                | 19.18076 | 72.99442
+   509 | Diva Junction             | 19.18876 | 73.04142
+  1612 | Dockyard Road             | 18.96748 | 72.84455
+  6555 | Dronagiri                 | 18.88133 | 72.96473
+ 16372 | Ghansoli                  | 19.11638 | 73.00699
+  2675 | Ghatkopar                 | 19.08569 | 72.90837
+  2195 | Goregaon                  | 19.16487 | 72.84955
+  1883 | Govandi                   | 19.05537 | 72.91507
+   517 | Grant Road                | 18.96335 | 72.81583
+  2678 | Guru Tegh Bahadur Nagar   | 19.03800 | 72.86435
+  9739 | Jogeshwari (Harbour Line) | 19.14115 | 72.84942
+  9740 | Jogeshwari (Western Line) | 19.13611 | 72.84894
+ 16350 | Juinagar                  | 19.05595 | 73.01825
+   455 | Kalva                     | 19.19522 | 72.99633
+  2193 | Kandivali                 | 19.20411 | 72.85174
+   474 | Kanjur Marg               | 19.12865 | 72.92804
+   330 | Khar Road                 | 19.06824 | 72.84004
+     2 | Kharbhav                  | 19.29832 | 72.98447
+ 16364 | Kharkopar                 | 18.95992 | 73.01414
+  1199 | King's Circle             | 19.03168 | 72.85774
+ 16373 | Koparkhairne              | 19.10332 | 73.01129
+  1702 | Kurla                     | 19.06528 | 72.87938
+ 15926 | Kurla                     | 19.06538 | 72.87937
+  4492 | Lokmanya Tilak Terminus   | 19.06947 | 72.89198
+   481 | Lower Parel               | 18.99568 | 72.83028
+  2674 | Mahalaxmi                 | 18.98252 | 72.82422
+  1685 | Mahim Junction            | 19.04066 | 72.84660
+  2194 | Malad                     | 19.18672 | 72.84859
+  1675 | Mankhurd                  | 19.04821 | 72.93171
+  1686 | Marine Lines              | 18.94576 | 72.82372
+  9727 | Masjid                    | 18.95229 | 72.83818
+  2672 | Matunga                   | 19.02744 | 72.85015
+  2673 | Matunga Road              | 19.02781 | 72.84668
+  3708 | Mira Road                 | 19.28170 | 72.85607
+  1131 | Mulund                    | 19.17214 | 72.95670
+  9729 | Mumbai CSMT               | 18.94049 | 72.83579
+  1687 | Mumbai Central            | 18.96959 | 72.81932
+   872 | Mumbra                    | 19.18994 | 73.02308
+  1676 | Nahur                     | 19.15464 | 72.94665
+ 16121 | Nerul                     | 19.03359 | 73.01816
+  6556 | Nhava Sheva               | 18.89806 | 72.98780
+  2236 | Parel                     | 19.00948 | 72.83766
+  2228 | Prabhadevi                | 19.00747 | 72.83590
+ 16371 | Rabale                    | 19.13664 | 73.00278
+  4291 | Ram Mandir                | 19.15102 | 72.85015
+  6557 | Ranjanpada                | 18.90926 | 73.01585
+  1613 | Reay Road                 | 18.97755 | 72.84410
+  1477 | Sandhurst Road            | 18.96092 | 72.83937
+ 14955 | Sanpada                   | 19.06598 | 73.00953
+     5 | Santa Cruz                | 19.08152 | 72.84176
+  9738 | Seawoods                  | 19.02182 | 73.01916
+   589 | Sewri                     | 18.99878 | 72.85442
+  1701 | Sion                      | 19.04652 | 72.86328
+ 16366 | Targhar                   | 18.99013 | 73.03440
+   308 | Thane                     | 19.18648 | 72.97577
+  2277 | Tilak Nagar               | 19.06579 | 72.89047
+ 16369 | Turbhe                    | 19.07616 | 73.01766
+  3933 | Uran City                 | 18.87842 | 72.95250
+ 17960 | Vadala Road               | 19.01623 | 72.85901
+ 14953 | Vashi                     | 19.06325 | 72.99880
+   475 | Vidyavihar                | 19.07954 | 72.89712
+  2665 | Vikhroli                  | 19.11148 | 72.92802
+  1688 | Vile Parle                | 19.09991 | 72.84400
+ 17905 |                           | 19.17207 | 72.95614
+(84 rows)
+
+== Q1.7  Schools (count, then first 15 by name)
+ schools 
+---------
+     710
+(1 row)
+
+  id   |               name               |      location_lon_lat      
+-------+----------------------------------+----------------------------
+ 14810 | A.B.Goregaonkar English School   | POINT(72.847109 19.167349)
+ 14769 | A.H. Wadia High School           | POINT(72.834713 19.126641)
+ 16655 | AECS 4                           | POINT(72.927959 19.034642)
+ 15028 | ATI Primary School               | POINT(72.879848 19.056084)
+ 16315 | Aarey School                     | POINT(72.879422 19.147189)
+ 17091 | Abhyudaya Nagar Municipal School | POINT(72.842909 18.990606)
+ 16509 | Activity High School             | POINT(72.80886 18.974314)
+ 17001 | Adarsh Vidya Mandir School       | POINT(72.968695 19.272081)
+ 15927 | Adarsha Vidyalaya                | POINT(72.889809 19.063023)
+ 15722 | Ahmed Sailor High School         | POINT(72.830115 18.965111)
+   843 | Ajmera Global School             | POINT(72.846752 19.233135)
+ 14971 | Akshara Vidyalaya                | POINT(72.818555 19.218115)
+ 16966 | Amber International School       | POINT(72.981475 19.224474)
+  2615 | American School of Bombay        | POINT(72.870696 19.067664)
+ 15949 | American School of Bombay        | POINT(72.870748 19.067724)
+(15 rows)
+
+== Q1.8  Road types (OSM highway=*) and their total length in km
+   road_type   | segments | length_km 
+---------------+----------+-----------
+ residential   |    43663 |    5077.6
+ service       |    18731 |    2324.0
+ tertiary      |     5455 |    1364.6
+ secondary     |     3511 |     744.7
+ primary       |     2193 |     592.7
+ footway       |     4316 |     389.6
+ trunk         |     1008 |     372.6
+ track         |      738 |     306.2
+ construction  |      306 |     210.2
+ living_street |     1872 |     204.9
+ path          |     1249 |     171.7
+ motorway      |      290 |     167.9
+ unclassified  |      504 |     142.9
+ trunk_link    |      472 |      74.8
+ motorway_link |      246 |      56.3
+(15 rows)
+
+== Q1.9  Administrative areas available (OSM boundary=administrative)
+           name           | admin_level | area_km2 
+--------------------------+-------------+----------
+ Mumbai City District     | 5           |     71.1
+ Mumbai Suburban District | 5           |    403.9
+ Panvel Subdistrict       | 6           |    586.8
+ Thane Subdistrict        | 6           |    368.9
+ Uran Subdistrict         | 6           |    203.3
+ Bhiwandi - Nizampur      | 8           |     27.2
+ Dombivali                | 8           |     55.3
+ Mira-Bhayander           | 8           |     89.1
+ Navi Mumbai              | 8           |    105.0
+ Panvel                   | 8           |    107.3
+ Thane                    | 8           |    141.2
+ Mumbai Zone 1            | 9           |     30.1
+ Mumbai Zone 2            | 9           |     40.6
+ Mumbai Zone 3            | 9           |     69.4
+ Mumbai Zone 4            | 9           |    153.1
+ Mumbai Zone 5            | 9           |     72.8
+ Mumbai Zone 6            | 9           |    108.5
+ A Ward                   | 10          |     10.0
+ Ambu Island              | 10          |      0.1
+ B Ward                   | 10          |      2.7
+ C Ward                   | 10          |      1.9
+ D Ward                   | 10          |      8.1
+ E Ward                   | 10          |      7.4
+ F/N Ward                 | 10          |     12.8
+ F/S Ward                 | 10          |      9.9
+ G/N Ward                 | 10          |      8.7
+ G/S Ward                 | 10          |      9.2
+ H/E Ward                 | 10          |     12.4
+ H/W Ward                 | 10          |      9.0
+ K/E Ward                 | 10          |     24.0
+ K/W Ward                 | 10          |     24.1
+ L Ward                   | 10          |     15.7
+ M/E Ward                 | 10          |     40.2
+ M/W Ward                 | 10          |     16.9
+ N Ward                   | 10          |     31.1
+ P/N Ward                 | 10          |     46.5
+ P/S Ward                 | 10          |     25.2
+ R/C Ward                 | 10          |     49.3
+ R/N Ward                 | 10          |     13.9
+ R/S Ward                 | 10          |     18.3
+ S Ward                   | 10          |     33.8
+ T Ward                   | 10          |     43.6
+(42 rows)
+
+== Q1.10 Is there a defensible popularity/rating attribute? (no "famous" field in OSM)
+  category  | places | with_rating_like_tag | with_cuisine | with_opening_hours | with_street_address 
+------------+--------+----------------------+--------------+--------------------+---------------------
+ hospital   |   1243 |                    0 |            0 |                 46 |                 149
+ hotel      |    352 |                   21 |            1 |                 12 |                  81
+ restaurant |   1140 |                    2 |          536 |                232 |                 324
+(3 rows)
+
+== Q1.11 How much of the extract is Greater Mumbai proper? (Mumbai City + Mumbai Suburban districts)
+    category     | in_extract | in_greater_mumbai 
+-----------------+------------+-------------------
+ hospital        |       1243 |               931
+ restaurant      |       1140 |               919
+ bank            |        734 |               570
+ school          |        710 |               543
+ cafe            |        508 |               437
+ hotel           |        352 |               297
+ atm             |        300 |               250
+ pharmacy        |        221 |               187
+ railway_station |        203 |               159
+ college         |        199 |               159
+ hairdresser     |        183 |               141
+ beauty          |        148 |               114
+ police          |        135 |               111
+(13 rows)
+
+== Q1.12 A real (but sparse) ranking attribute: hotels with an OSM stars=* classification
+                name                 | stars |      location_lon_lat      
+-------------------------------------+-------+----------------------------
+ Hilton Mumbai International Airport | 5     | POINT(72.870935 19.10437)
+ JW Marriott Mumbai Sahar            | 5     | POINT(72.87776 19.103137)
+ Meluha                              | 5     | POINT(72.910963 19.117809)
+ Taj Lands End                       | 5     | POINT(72.819529 19.043396)
+ Taj Santacruz Mumbai                | 5     | POINT(72.854397 19.092694)
+ The Oberoi                          | 5     | POINT(72.820585 18.926984)
+ The Westin Mumbai Powai Lake        | 5     | POINT(72.901453 19.13448)
+ Trident, Nariman-Point              | 5     | POINT(72.821126 18.927838)
+ Four Points by Sheraton Navi Mumbai | 4     | POINT(72.999692 19.066294)
+ Hotel Nimantran                     | 4     | POINT(73.032932 19.010332)
+ The Ambassador                      | 4     | POINT(72.824803 18.933771)
+ Tunga                               | 4     | POINT(72.9992 19.067167)
+ United 21                           | 4     | POINT(72.977677 19.207702)
+ Atlantic                            | 3     | POINT(72.827473 19.087013)
+ IBIS                                | 3     | POINT(72.963923 19.20777)
+ Nirvana Residences                  | 3     | POINT(72.830097 19.078221)
+ Rodas - An Ecotel Hotel             | 3     | POINT(72.911683 19.118593)
+ Royal Inn                           | 3     | POINT(72.834043 19.067924)
+ The Altruist Business Hotel NM-1    | 3     | POINT(73.008527 19.106206)
+ The Sahil Hotel                     | 3     | POINT(72.823646 18.968743)
+(20 rows)
+

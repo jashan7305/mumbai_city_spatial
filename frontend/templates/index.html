@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mumbai Spatial Database</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Mumbai Spatial Database</h1>
+    <p class="subtitle">PostgreSQL + PostGIS · real OpenStreetMap data · read-only</p>
+    <nav>
+      <a href="#location">A. Search around a location</a>
+      <a href="#predefined">B. Predefined project queries</a>
+      <a href="#live">C. Live SQL query console</a>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ============ A. Search around a location ============ -->
+    <section id="location" class="mode mode-a">
+      <h2><span class="badge">A</span> Search around a location</h2>
+      <p class="mode-intro">Enter any latitude and longitude and find real OSM places near it.
+        The query runs live in PostGIS (KNN <code>&lt;-&gt;</code> or <code>ST_DWithin</code>).</p>
+
+      <div class="panel">
+        <div class="field-row">
+          <div class="field">
+            <label for="loc-lat">Latitude</label>
+            <input id="loc-lat" type="text" inputmode="decimal" value="19.0760">
+          </div>
+          <div class="field">
+            <label for="loc-lon">Longitude</label>
+            <input id="loc-lon" type="text" inputmode="decimal" value="72.8777">
+          </div>
+          <div class="field wide">
+            <label for="loc-station">…or fill from a railway station</label>
+            <select id="loc-station">
+              <option value="">— choose a station —</option>
+              {% for st in stations %}
+              <option value="{{ st.lat }},{{ st.lon }}">{{ st.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="field">
+            <label>&nbsp;</label>
+            <button id="loc-mine" type="button" class="secondary">Use my location</button>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="loc-category">Category</label>
+            <select id="loc-category">
+              <option value="any">any category</option>
+              {% for c in location_categories %}
+              <option value="{{ c }}" {% if c == "hospital" %}selected{% endif %}>{{ c }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="field">
+            <label for="loc-mode">Search type</label>
+            <select id="loc-mode">
+              <option value="nearest">Nearest N (KNN)</option>
+              <option value="radius">All within radius</option>
+            </select>
+          </div>
+          <div class="field" id="loc-limit-box">
+            <label for="loc-limit">N (results)</label>
+            <input id="loc-limit" type="text" inputmode="numeric" value="10">
+          </div>
+          <div class="field" id="loc-radius-box" hidden>
+            <label for="loc-radius">Radius (metres)</label>
+            <input id="loc-radius" type="text" inputmode="numeric" value="1000">
+          </div>
+        </div>
+
+        <div class="buttons">
+          <button id="loc-run" type="button">Search</button>
+          <button id="loc-to-live" type="button" class="secondary" disabled>Open this SQL in the live console</button>
+        </div>
+      </div>
+
+      <div class="output">
+        <div id="loc-status"></div>
+        <div id="loc-results"></div>
+        <details id="loc-sql-box" hidden>
+          <summary>SQL that was executed</summary>
+          <pre id="loc-sql"></pre>
+        </details>
+      </div>
+    </section>
+
+    <!-- ============ B. Predefined project queries ============ -->
+    <section id="predefined" class="mode mode-b">
+      <h2><span class="badge">B</span> Predefined project queries</h2>
+      <p class="mode-intro">The tested queries from <code>queries/01–09_*.sql</code>, run exactly as
+        written in the project files (their saved output is in <code>results/</code>).</p>
+
+      <div class="panel">
+        <label for="query">Select query</label>
+        <select id="query">
+          {% for file, blocks in groups.items() %}
+          <optgroup label="{{ file }}">
+            {% for b in blocks %}
+            <option value="{{ b.id }}">{{ b.id }} — {{ b.title }}</option>
+            {% endfor %}
+          </optgroup>
+          {% endfor %}
+        </select>
+
+        <p id="description" class="description"></p>
+
+        <form id="params"></form>
+
+        <button id="run" type="button">Run Query</button>
+        <button id="copy-to-live" type="button" class="secondary">Open in live console</button>
+
+        <details>
+          <summary>SQL from the query file</summary>
+          <pre id="sql"></pre>
+        </details>
+      </div>
+
+      <div class="output">
+        <p id="status" class="status"></p>
+        <div id="results"></div>
+      </div>
+    </section>
+
+    <!-- ============ C. Live SQL query console ============ -->
+    <section id="live" class="mode mode-c">
+      <h2><span class="badge">C</span> Live SQL query console</h2>
+      <p class="mode-intro">Write or change any read-only PostgreSQL/PostGIS query and run it now
+        against <code>mumbai_spatial_db</code>. Allowed: <code>SELECT</code>,
+        <code>WITH … SELECT</code>, <code>EXPLAIN [ANALYZE]</code>. Writes and schema changes are blocked.</p>
+
+      <div class="live-grid">
+        <div class="panel">
+          <label for="live-sql">Write PostgreSQL/PostGIS SQL</label>
+          <textarea id="live-sql" spellcheck="false" rows="12">{{ samples[0][1] }}</textarea>
+          <div class="buttons">
+            <button id="live-run" type="button">Run Query</button>
+            <button id="live-clear" type="button" class="secondary">Clear</button>
+            <span class="hint">Ctrl + Enter also runs the query.</span>
+          </div>
+
+          <h3>Sample SQL</h3>
+          <ul class="samples">
+            {% for title, sql in samples %}
+            <li>
+              <span>{{ title }}</span>
+              <button type="button" class="secondary small load-sample" data-index="{{ loop.index0 }}">Load into editor</button>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <aside class="panel help">
+          <h3>What can I query?</h3>
+          <p class="hint">All geometries are SRID 4326 (longitude, latitude in degrees).
+            Cast to <code>::geography</code> for distances in metres.</p>
+          <dl>
+            {% for t in schema %}
+            <dt><code>{{ t.name }}</code> <span class="hint">{{ "{:,}".format(t.rows) }} rows</span></dt>
+            <dd>{{ t.columns | join(", ") }}</dd>
+            {% endfor %}
+          </dl>
+          <p class="hint">Common <code>places.category</code> values: {{ categories | join(", ") }}.
+            Wards are named like <code>'H/W Ward'</code> (admin_level 10).</p>
+
+          <h4>Distance / proximity</h4>
+          <ul class="funcs">
+            <li><code>ST_Distance(a, b)</code> — distance between two shapes (metres on geography).</li>
+            <li><code>ST_DWithin(a, b, d)</code> — true if a and b are within distance d (index-assisted).</li>
+          </ul>
+          <h4>Relationships</h4>
+          <ul class="funcs">
+            <li><code>ST_Within(a, b)</code> — a lies inside b.</li>
+            <li><code>ST_Contains(a, b)</code> — a contains b (boundary excluded).</li>
+            <li><code>ST_Covers(a, b)</code> — like Contains, but boundary points count.</li>
+            <li><code>ST_Intersects(a, b)</code> — a and b share any point.</li>
+            <li><code>ST_Touches(a, b)</code> — boundaries meet, interiors do not.</li>
+            <li><code>ST_Crosses(a, b)</code> — e.g. a road passing through an area.</li>
+            <li><code>ST_Overlaps(a, b)</code> — areas partly overlap, neither contains the other.</li>
+          </ul>
+          <h4>Nearest neighbour</h4>
+          <ul class="funcs">
+            <li><code>ORDER BY geom &lt;-&gt; point LIMIT k</code> — the k nearest, using the GiST index.</li>
+          </ul>
+          <h4>Geometry</h4>
+          <ul class="funcs">
+            <li><code>ST_Point(lon, lat)</code> — makes a point (longitude first!).</li>
+            <li><code>ST_SetSRID(g, 4326)</code> — labels a geometry with its coordinate system.</li>
+            <li><code>ST_Transform(g, srid)</code> — converts coordinates to another system.</li>
+            <li><code>ST_AsText(geom)</code> — shows a geometry as readable WKT.</li>
+          </ul>
+        </aside>
+      </div>
+
+      <div class="output">
+        <div id="live-status"></div>
+        <div id="live-results"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const CATALOG = {{ catalog | tojson }};
+    const LABELS = {{ labels | tojson }};
+    const CHOICES = {{ choices | tojson }};
+    const SAMPLES = {{ samples | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

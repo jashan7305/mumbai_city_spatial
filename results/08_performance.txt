@@ -1,0 +1,134 @@
+== Q8.0  Spatial (GiST) indexes and their sizes
+      index_name      | table_name | method |                                        definition                                         |  size   
+----------------------+------------+--------+-------------------------------------------------------------------------------------------+---------
+ areas_geom_gist_idx  | areas      | gist   | CREATE INDEX areas_geom_gist_idx ON spatial_data.areas USING gist (geom)                  | 8008 kB
+ places_geog_gist_idx | places     | gist   | CREATE INDEX places_geog_gist_idx ON spatial_data.places USING gist (((geom)::geography)) | 1424 kB
+ places_geom_gist_idx | places     | gist   | CREATE INDEX places_geom_gist_idx ON spatial_data.places USING gist (geom)                | 776 kB
+ roads_geog_gist_idx  | roads      | gist   | CREATE INDEX roads_geog_gist_idx ON spatial_data.roads USING gist (((geom)::geography))   | 7312 kB
+ roads_geom_gist_idx  | roads      | gist   | CREATE INDEX roads_geom_gist_idx ON spatial_data.roads USING gist (geom)                  | 3952 kB
+(5 rows)
+
+== Q8.1  Radius query: restaurants within 1 km (ST_DWithin on geography)
+                                                                       QUERY PLAN                                                                       
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on places p  (cost=26.66..188.03 rows=1 width=26) (actual time=6.925..6.976 rows=9 loops=1)
+   Recheck Cond: (category = 'restaurant'::text)
+   Filter: st_dwithin((geom)::geography, '0101000020E6100000C0EC9E3C2C385240FA7E6ABC74133340'::geography, '1000'::double precision, true)
+   Rows Removed by Filter: 3
+   Heap Blocks: exact=7
+   Buffers: shared hit=102
+   ->  BitmapAnd  (cost=26.66..26.66 rows=10 width=0) (actual time=0.141..0.142 rows=0 loops=1)
+         Buffers: shared hit=12
+         ->  Bitmap Index Scan on places_geog_gist_idx  (cost=0.00..9.57 rows=156 width=0) (actual time=0.077..0.078 rows=176 loops=1)
+               Index Cond: ((geom)::geography && _st_expand('0101000020E6100000C0EC9E3C2C385240FA7E6ABC74133340'::geography, '1000'::double precision))
+               Buffers: shared hit=9
+         ->  Bitmap Index Scan on places_category_idx  (cost=0.00..16.84 rows=1140 width=0) (actual time=0.059..0.059 rows=1140 loops=1)
+               Index Cond: (category = 'restaurant'::text)
+               Buffers: shared hit=3
+ Planning:
+   Buffers: shared hit=185
+ Planning Time: 5.443 ms
+ Execution Time: 7.064 ms
+(18 rows)
+
+== Q8.2  KNN query: 5 nearest hospitals (ORDER BY <-> LIMIT 5)
+                                                                 QUERY PLAN                                                                 
+--------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.28..16.01 rows=5 width=34) (actual time=0.125..0.282 rows=5 loops=1)
+   Buffers: shared hit=50
+   ->  Index Scan using places_geog_gist_idx on places p  (cost=0.28..3912.47 rows=1243 width=34) (actual time=0.124..0.280 rows=5 loops=1)
+         Order By: ((geom)::geography <-> '0101000020E6100000C0EC9E3C2C385240FA7E6ABC74133340'::geography)
+         Filter: (category = 'hospital'::text)
+         Rows Removed by Filter: 49
+         Buffers: shared hit=50
+ Planning:
+   Buffers: shared hit=39
+ Planning Time: 0.122 ms
+ Execution Time: 0.308 ms
+(11 rows)
+
+== Q8.3  Point-in-polygon: places inside the K/W Ward polygon (ST_Within)
+                                                                   QUERY PLAN                                                                   
+------------------------------------------------------------------------------------------------------------------------------------------------
+ Aggregate  (cost=45.67..45.68 rows=1 width=8) (actual time=3.313..3.314 rows=1 loops=1)
+   Buffers: shared hit=1785
+   ->  Nested Loop  (cost=0.57..45.64 rows=11 width=0) (actual time=0.143..3.127 rows=1910 loops=1)
+         Buffers: shared hit=1785
+         ->  Index Scan using areas_type_name_idx on areas  (cost=0.42..8.44 rows=1 width=182) (actual time=0.015..0.016 rows=1 loops=1)
+               Index Cond: ((area_type = 'administrative'::text) AND (name = 'K/W Ward'::text))
+               Buffers: shared hit=4
+         ->  Index Scan using places_geom_gist_idx on places p  (cost=0.15..37.18 rows=2 width=32) (actual time=0.073..2.824 rows=1910 loops=1)
+               Index Cond: (geom @ areas.geom)
+               Filter: st_within(geom, areas.geom)
+               Rows Removed by Filter: 334
+               Buffers: shared hit=1753
+ Planning:
+   Buffers: shared hit=82
+ Planning Time: 1.077 ms
+ Execution Time: 3.369 ms
+(16 rows)
+
+== Q8.4  Spatial join: restaurants within 500 m of every railway station
+                                                                                     QUERY PLAN                                                                                      
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=508.39..508.43 rows=2 width=16) (actual time=4.039..4.075 rows=50 loops=1)
+   Group Key: places.id
+   Buffers: shared hit=3398
+   ->  Sort  (cost=508.39..508.40 rows=2 width=16) (actual time=4.034..4.045 rows=231 loops=1)
+         Sort Key: places.id
+         Sort Method: quicksort  Memory: 34kB
+         Buffers: shared hit=3398
+         ->  Nested Loop  (cost=6.21..508.38 rows=2 width=16) (actual time=0.256..3.997 rows=231 loops=1)
+               Buffers: shared hit=3395
+               ->  Bitmap Heap Scan on places  (cost=5.81..433.46 rows=2 width=40) (actual time=0.023..0.168 rows=84 loops=1)
+                     Recheck Cond: (category = 'railway_station'::text)
+                     Filter: (((tags -> 'railway'::text) = ANY ('{station,halt}'::text[])) AND (COALESCE((tags -> 'station'::text), ''::text) <> ALL ('{subway,monorail}'::text[])))
+                     Rows Removed by Filter: 119
+                     Heap Blocks: exact=70
+                     Buffers: shared hit=72
+                     ->  Bitmap Index Scan on places_category_idx  (cost=0.00..5.81 rows=203 width=0) (actual time=0.010..0.010 rows=203 loops=1)
+                           Index Cond: (category = 'railway_station'::text)
+                           Buffers: shared hit=2
+               ->  Index Scan using places_geog_gist_idx on places r  (cost=0.40..37.45 rows=1 width=40) (actual time=0.023..0.044 rows=3 loops=84)
+                     Index Cond: ((geom)::geography && _st_expand((places.geom)::geography, '500'::double precision))
+                     Filter: ((category = 'restaurant'::text) AND st_dwithin((geom)::geography, (places.geom)::geography, '500'::double precision, true))
+                     Rows Removed by Filter: 58
+                     Buffers: shared hit=3323
+ Planning:
+   Buffers: shared hit=77
+ Planning Time: 0.226 ms
+ Execution Time: 4.297 ms
+(27 rows)
+
+== Q8.5  The same spatial join WITHOUT index scans (controlled comparison)
+BEGIN
+SET
+SET
+                                                                                                             QUERY PLAN                                                                                                             
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ GroupAggregate  (cost=30446.01..30446.04 rows=2 width=16) (actual time=147.346..147.389 rows=50 loops=1)
+   Group Key: places.id
+   Buffers: shared hit=1258
+   ->  Sort  (cost=30446.01..30446.01 rows=2 width=16) (actual time=147.336..147.351 rows=231 loops=1)
+         Sort Key: places.id
+         Sort Method: quicksort  Memory: 34kB
+         Buffers: shared hit=1258
+         ->  Nested Loop  (cost=0.00..30446.00 rows=2 width=16) (actual time=3.224..147.268 rows=231 loops=1)
+               Join Filter: st_dwithin((r.geom)::geography, (places.geom)::geography, '500'::double precision, true)
+               Rows Removed by Join Filter: 95529
+               Buffers: shared hit=1258
+               ->  Seq Scan on places r  (cost=0.00..860.46 rows=1140 width=40) (actual time=0.006..2.539 rows=1140 loops=1)
+                     Filter: (category = 'restaurant'::text)
+                     Rows Removed by Filter: 17377
+                     Buffers: shared hit=629
+               ->  Materialize  (cost=0.00..1045.64 rows=2 width=40) (actual time=0.000..0.006 rows=84 loops=1140)
+                     Buffers: shared hit=629
+                     ->  Seq Scan on places  (cost=0.00..1045.63 rows=2 width=40) (actual time=0.004..2.193 rows=84 loops=1)
+                           Filter: ((category = 'railway_station'::text) AND ((tags -> 'railway'::text) = ANY ('{station,halt}'::text[])) AND (COALESCE((tags -> 'station'::text), ''::text) <> ALL ('{subway,monorail}'::text[])))
+                           Rows Removed by Filter: 18433
+                           Buffers: shared hit=629
+ Planning Time: 0.129 ms
+ Execution Time: 147.418 ms
+(23 rows)
+
+ROLLBACK

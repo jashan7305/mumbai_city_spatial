@@ -1,0 +1,95 @@
+== Q5.1  ST_Within: which BMC wards lie within each district?
+         district         | wards_within |                                                                           wards                                                                           
+--------------------------+--------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------
+ Mumbai City District     |            9 | A Ward, B Ward, C Ward, D Ward, E Ward, F/N Ward, F/S Ward, G/N Ward, G/S Ward
+ Mumbai Suburban District |           16 | Ambu Island, H/E Ward, H/W Ward, K/E Ward, K/W Ward, L Ward, M/E Ward, M/W Ward, N Ward, P/N Ward, P/S Ward, R/C Ward, R/N Ward, R/S Ward, S Ward, T Ward
+(2 rows)
+
+== Q5.2  ST_Contains: does Mumbai Suburban District contain these stations?
+  station   | suburban_district_contains_it 
+------------+-------------------------------
+ Andheri    | t
+ Bandra     | t
+ Borivali   | t
+ Churchgate | f
+ Dadar      | f
+ Dadar      | f
+ Thane      | f
+ Vashi      | f
+(8 rows)
+
+== Q5.3  ST_Covers vs ST_Contains: places exactly on a district boundary
+           name           | covered | contained | on_boundary_only 
+--------------------------+---------+-----------+------------------
+ Mumbai City District     |    3709 |      3706 |                3
+ Mumbai Suburban District |   10410 |     10410 |                0
+(2 rows)
+
+== Q5.4  ST_Intersects: railway lines that pass through Bandra West
+ railway_type  | segments | length_inside_m 
+---------------+----------+-----------------
+ rail          |       15 |            4594
+ construction  |        3 |            6729
+ platform_edge |        2 |             373
+ miniature     |        1 |             337
+(4 rows)
+
+== Q5.5  ST_Crosses: named major roads that cross the H/W Ward (Bandra West) boundary
+          name           | road_type 
+-------------------------+-----------
+ BKC - Sealink Road      | motorway
+ Juhu Tara Road          | secondary
+ Linking Road            | secondary
+ Mahim Causeway          | primary
+ PV Avasare Marg         | primary
+ Rajiv Gandhi Sea Link   | motorway
+ Santa Cruz Flyover      | primary
+ Swami Vivekanand Road   | primary
+ Western Express Highway | motorway
+(9 rows)
+
+== Q5.6  ST_Touches: wards that share a border with H/W Ward
+ neighbouring_ward | shared_border_m 
+-------------------+-----------------
+ H/E Ward          |            4410
+ K/W Ward          |            2787
+ G/N Ward          |             634
+ K/E Ward          |               0
+(4 rows)
+
+== Q5.7  ST_Overlaps: the OSM "Bandra West" suburb polygon vs the BMC wards
+   ward   | overlaps | suburb_within_ward | shared_km2 
+----------+----------+--------------------+------------
+ H/W Ward | t        | f                  |      7.167
+ K/W Ward | t        | f                  |      0.008
+(2 rows)
+
+== Q5.8  ST_Disjoint: wards with no point in common with Mumbai City District
+   ward   | disjoint_from_city_district 
+----------+-----------------------------
+ A Ward   | f
+ B Ward   | f
+ C Ward   | f
+ D Ward   | f
+ E Ward   | f
+ F/N Ward | f
+ F/S Ward | f
+ G/N Ward | f
+ G/S Ward | f
+ H/E Ward | f
+ H/W Ward | f
+ L Ward   | f
+ M/W Ward | f
+ K/E Ward | t
+ K/W Ward | t
+ M/E Ward | t
+ N Ward   | t
+ P/N Ward | t
+ P/S Ward | t
+ R/C Ward | t
+ R/N Ward | t
+ R/S Ward | t
+ S Ward   | t
+ T Ward   | t
+(24 rows)
+

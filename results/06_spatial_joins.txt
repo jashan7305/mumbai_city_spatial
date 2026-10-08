@@ -1,0 +1,102 @@
+== Q6.1  Hospitals within 1 km of each railway station (top 15 stations)
+          station          | hospitals_within_1km | closest_m 
+---------------------------+----------------------+-----------
+ Ghatkopar                 |                   42 |     149.6
+ Mulund                    |                   42 |     171.8
+ (unnamed: way/1330148427) |                   42 |     168.7
+ Malad                     |                   40 |     193.6
+ Borivali                  |                   36 |     315.4
+ Thane                     |                   31 |     197.7
+ Chembur                   |                   29 |      81.7
+ Jogeshwari (Harbour Line) |                   20 |     434.3
+ Grant Road                |                   19 |     354.4
+ Khar Road                 |                   19 |     319.3
+ Santa Cruz                |                   18 |     139.7
+ Vidyavihar                |                   18 |     455.2
+ Vile Parle                |                   18 |     247.7
+ Jogeshwari (Western Line) |                   17 |     141.4
+ Kandivali                 |                   17 |     112.8
+(15 rows)
+
+== Q6.2  Restaurants within 500 m of railway stations (top 15 stations)
+          station          | restaurants_within_500m 
+---------------------------+-------------------------
+ (unnamed: way/1330148427) |                      15
+ Mulund                    |                      14
+ Grant Road                |                      12
+ Nerul                     |                      11
+ Mumbai CSMT               |                      10
+ Churchgate                |                       9
+ Sion                      |                       9
+ Charni Road               |                       7
+ Chembur                   |                       7
+ Ghatkopar                 |                       7
+ Thane                     |                       7
+ Vashi                     |                       7
+ Airoli                    |                       6
+ Dadar                     |                       6
+ Matunga Road              |                       6
+(15 rows)
+
+== Q6.3  Hospitals within 100 m of a major road vs. not (motorway/trunk/primary/secondary)
+ within_100m_of_major_road | hospitals 
+---------------------------+-----------
+ t                         |       725
+ f                         |       518
+(2 rows)
+
+== Q6.4  Examples: named hospitals and the major road they are next to (<= 30 m)
+                 hospital                  |              road              | road_type | distance_m 
+-------------------------------------------+--------------------------------+-----------+------------
+ Jasmine Hospital And Wow Clinic           | Swatantyaveer Sawarkar Marg    | secondary |       26.9
+ Saifee Ambulance                          | Ebrahim Rehmatullah Road       | primary   |       15.4
+ Siddarth Municipal Hospital               | Shastri Road                   | secondary |       26.6
+ JOY Hospital                              | Road No 10                     | secondary |       30.0
+ Sujay Hospital                            | CD Barfiwala Road              | primary   |       17.7
+ Sailee Hospital and Diagnostic Center     | Link Road                      | primary   |       15.1
+ Mata Ramabai B Ambedkar Hospital          | Ramakrishna Chemburkar Marg    | secondary |       29.1
+ Sai Snehdeep Hospital KK                  | Vashi - Koparkhairne Link Road | secondary |       19.3
+ Mangal Murti Hospital and Polyclinic      | Gorai Link Road                | secondary |       12.0
+ nidan hospital                            | Lal Bahadur Shastri Marg       | primary   |       15.1
+ bba                                       | P.L. Lokhande Marg             | secondary |       24.4
+ Saidhanhospital Iccu and Eye Care         | Navghar Marg                   | secondary |       16.3
+ The Origin International Fertility Centre | Glady's Alwares Avenue         | secondary |       24.4
+ v care hospital intensive& unit care      | S.G. Barve Marg                | secondary |       26.0
+ fauziya hospital                          | Lal Bahadur Shastri Marg       | primary   |       22.4
+(15 rows)
+
+== Q6.5  Schools, hospitals and restaurants inside every BMC ward (point-in-polygon join)
+   ward   | schools | hospitals | restaurants 
+----------+---------+-----------+-------------
+ A Ward   |      25 |        22 |         108
+ B Ward   |       2 |         9 |          14
+ C Ward   |       0 |         3 |          14
+ D Ward   |      39 |        33 |          60
+ E Ward   |      19 |        28 |           8
+ F/N Ward |      36 |        27 |          25
+ F/S Ward |      13 |        19 |           1
+ G/N Ward |      36 |        40 |          43
+ G/S Ward |      25 |        17 |          25
+ H/E Ward |      17 |        21 |          29
+ H/W Ward |      31 |        34 |         105
+ K/E Ward |      27 |        62 |          59
+ K/W Ward |      43 |        76 |         137
+ L Ward   |      14 |        51 |          27
+ M/E Ward |      38 |        23 |          26
+ M/W Ward |      19 |        55 |          19
+ N Ward   |      12 |        60 |          21
+ P/N Ward |      25 |        67 |          20
+ P/S Ward |      16 |        31 |          15
+ R/C Ward |      21 |        77 |          22
+ R/N Ward |       7 |        28 |          15
+ R/S Ward |       8 |        44 |          20
+ S Ward   |      33 |        47 |          59
+ T Ward   |      37 |        57 |          47
+(24 rows)
+
+== Q6.6  Buildings (polygons) inside Bandra West: count and footprint area
+ buildings | footprint_km2 | suburb_km2 
+-----------+---------------+------------
+      5281 |         1.526 |      7.213
+(1 row)
+

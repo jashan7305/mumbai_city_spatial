@@ -1,0 +1,86 @@
+== Q7.1  5 nearest restaurants INSIDE Bandra West to Bandra railway station
+  id   |           name           | cuisine | distance_m 
+-------+--------------------------+---------+------------
+ 11667 | New Riyaz Restaurant     |         |      162.3
+  8937 | Sai Sagar                |         |      289.8
+  8499 | Lucky                    |         |      290.5
+  2809 | Deepa Bar and Restaurant | indian  |      397.3
+ 11580 | Gokul Refreshments       |         |      559.0
+(5 rows)
+
+== Q7.2  Hospitals within 2 km of a railway station located in Andheri West (K/W Ward)
+  id   |                                 hospital                                  |  closest_station_in_ward  | distance_m 
+-------+---------------------------------------------------------------------------+---------------------------+------------
+  6001 | Bses Mg Hospital (Managed By)Brahma Kumari Global Hospital and Res Center | Andheri                   |      152.9
+  7225 | Babasaheb Gawde Hospital                                                  | Vile Parle                |      247.7
+  5329 | Sangita Maternity Surgical and Diagnostic Centre                          | Andheri                   |      281.6
+  5586 | Dr Telangs Dhanvantari Hospital                                           | Andheri                   |      337.6
+  5773 | Vibha Maternity and Surgical Nursing Home                                 | Andheri                   |      371.1
+  6138 | Dr Shah Hospital                                                          | Jogeshwari (Harbour Line) |      434.3
+ 16053 | Hindu Hruday Samrat Balasaheb Thackerey Trauma Care Municipal Hospital    | Jogeshwari (Harbour Line) |      453.5
+  6718 | CritiCare Hospital                                                        | Andheri                   |      470.1
+  6143 | Ashish Maternity and Nursing Home - Vile Parle (E)                        | Vile Parle                |      475.6
+ 14914 | Karbhari                                                                  | Vile Parle                |      483.8
+  5372 | Parle Eye Hospital                                                        | Vile Parle                |      494.3
+  7233 | CritiCare Hospital                                                        | Andheri                   |      502.3
+  6105 | Dr. Shindes Childrens Hospital and Nicu                                   | Jogeshwari (Harbour Line) |      504.9
+  5641 | Mallika Hospital and Envision Eye Centre                                  | Jogeshwari (Harbour Line) |      508.6
+  5966 | Vivek Pathology Laboratory                                                | Vile Parle                |      556.8
+  6773 | Dr. Wagh Maternity Hospital                                               | Vile Parle                |      560.5
+  5780 | Dr. Kamat's Hospital                                                      | Jogeshwari (Harbour Line) |      563.0
+  5870 | Smt. Laxmiben Dharamsi Karsan Gala Eye Hospital                           | Vile Parle                |      563.5
+  2443 | Nanavati Hospital, Mumbai                                                 | Vile Parle                |      605.7
+  5596 | Patil Hospital, Mumbai                                                    | Andheri                   |      608.8
+(20 rows)
+
+   (total count)
+ hospitals_within_2km_of_a_kw_ward_station |                stations_in_ward                
+-------------------------------------------+------------------------------------------------
+                                       100 | Andheri, Jogeshwari (Harbour Line), Vile Parle
+(1 row)
+
+== Q7.3  Restaurants within 200 m of Linking Road, ordered by distance to the road
+  id   |       name       |        cuisine         | distance_to_road_m 
+-------+------------------+------------------------+--------------------
+  2345 | Me So Happy      |                        |                9.5
+ 11152 | Copper Chimney   |                        |               10.9
+  3760 | Jai Jawan        |                        |               11.8
+ 10899 | Persian Darbar   | indian                 |               12.4
+ 11700 | Khao Piyo        |                        |               14.1
+ 11843 | The Bluebop Cafe |                        |               20.0
+  8948 | Sheetal Bukhara  | chinese;indian         |               44.8
+  8885 | Los Cavos        | tex-mex;latin_american |               58.1
+ 11804 | Vietnom Mumbai   | vietnamese             |               87.5
+ 11131 | 1441 Restaurant  | pizza                  |               94.7
+ 10055 | 5 Spice          | chinese                |              113.6
+ 10056 | Jai Jawan        | indian                 |              117.2
+ 10778 | China Gate       | chinese                |              134.9
+  9688 | Zima             |                        |              136.6
+ 10777 | GOH JIA TING     | seafood                |              140.3
+  8876 | Pizza Hut        | pizza                  |              149.5
+ 13669 | Donna Deli       | asian                  |              162.5
+  8840 | Hakkasan         | chinese                |              170.5
+ 10051 | Izumi            | japanese               |              176.3
+ 14210 | Café Mommy Joon  | persian                |              178.8
+(20 rows)
+
+== Q7.4  Restaurants within 1 km of the point (72.8777, 19.0760) that are in the same ward as the point
+  ward  |  id   |               name                | distance_m 
+--------+-------+-----------------------------------+------------
+ L Ward |  9255 | Karizma Dhaba                     |      119.5
+ L Ward | 15824 | Deluxe Restaurant                 |      405.2
+ L Ward |  9206 | Istanbul Darbar                   |      416.6
+ L Ward |  2140 | Sahara                            |      468.9
+ L Ward |  2141 | Skyway                            |      628.2
+ L Ward |  9269 | Sunlight Restaurant               |      759.7
+ L Ward |  9240 | SHAHI Dessert and Fast Food Juice |      860.8
+(7 rows)
+
+== Q7.5  The 3 nearest 5-star hotels (OSM stars=5) to Bandra railway station
+                name                 | stars | distance_km 
+-------------------------------------+-------+-------------
+ Taj Lands End                       | 5     |        2.53
+ Taj Santacruz Mumbai                | 5     |        4.43
+ Hilton Mumbai International Airport | 5     |        6.35
+(3 rows)
+

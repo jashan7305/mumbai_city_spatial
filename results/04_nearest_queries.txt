@@ -1,0 +1,55 @@
+== Q4.1  The single nearest hospital to (72.8777, 19.0760)
+  id   |       name        | distance_m 
+-------+-------------------+------------
+ 15453 | New Noor Hospital |       39.4
+(1 row)
+
+== Q4.2  The 5 nearest restaurants
+  id   |       name        | cuisine  | distance_m 
+-------+-------------------+----------+------------
+  9255 | Karizma Dhaba     |          |      119.5
+ 15824 | Deluxe Restaurant |          |      405.2
+  9206 | Istanbul Darbar   |          |      416.6
+  2140 | Sahara            | regional |      468.9
+  2141 | Skyway            | regional |      628.2
+(5 rows)
+
+== Q4.3  The 10 nearest hospitals
+  id   |               name                | distance_m 
+-------+-----------------------------------+------------
+ 15453 | New Noor Hospital                 |       39.4
+  6754 | Habib Hospital                    |      354.6
+  6747 | Muskaan Hospital                  |      387.1
+  8100 | bhabha hospital                   |      569.2
+  7614 | Bhabha Hospital                   |      572.2
+  2162 | Kurla Nursing Room                |      653.8
+  5979 | Despande Nursing Home             |      673.2
+  6730 | Buddh Colony BMC Hospital         |      674.2
+ 15438 | City Hospital and Research Centre |      719.9
+  2290 | arpan nursing home                |      732.7
+(10 rows)
+
+== Q4.4  Nearest railway station to the point
+  id   | name  | distance_m 
+-------+-------+------------
+ 15926 | Kurla |     1188.5
+(1 row)
+
+== Q4.5  KNN join: nearest hospital to every Western Line station from Churchgate to Bandra
+ station_id |    station     |                    nearest_hospital                    | distance_m 
+------------+----------------+--------------------------------------------------------+------------
+       2669 | Churchgate     | Atmasingh Jassasingh Bankebihar Municipal ENT Hospital |      446.1
+       1686 | Marine Lines   | Smt. Kamladevi Gauridutt Mittal Ayurvedic Hospital     |      590.8
+       1682 | Charni Road    | Saifee Hospital                                        |       75.1
+        517 | Grant Road     | Bhatia                                                 |      354.4
+       1687 | Mumbai Central | Nair Hospital Dental College                           |      249.0
+       2674 | Mahalaxmi      |                                                        |      554.5
+        481 | Lower Parel    | Mhaskar Hospital                                       |      395.4
+       2228 | Prabhadevi     | Laxmi Niwas General Hospital                           |       89.6
+       1683 | Dadar          | G S B S Medical Trust                                  |      299.8
+       1684 | Dadar          | Thyrocare Aarogyam Center - Dadar West                 |      197.4
+       2673 | Matunga Road   | smriti narvekar                                        |      488.8
+       1685 | Mahim Junction | Pikale Hospital                                        |      220.9
+       1680 | Bandra         | Mahatma Gandhi Seva Mandir                             |      369.4
+(13 rows)
+
