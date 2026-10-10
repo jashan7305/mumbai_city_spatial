@@ -508,4 +508,5 @@ def run_sql():
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=int(os.environ.get("WEB_PORT", "5050")))
+    app.run(host=os.environ.get("WEB_HOST", "127.0.0.1"),
+            port=int(os.environ.get("WEB_PORT", "5050")))

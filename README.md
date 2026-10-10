@@ -581,3 +581,46 @@ after 30 s with a clear message.
   contains 34 hospitals, and there are 4 ATMs near Andheri.
 
 Data © OpenStreetMap contributors, available under the Open Database License (ODbL 1.0).
+
+## 15. Docker Compose
+
+Docker is an alternative to the native installation above. It runs the
+PostGIS database in its own container, builds the database from the committed
+`data/raw/mumbai.osm.pbf` extract on the first start, and serves the same
+read-only web page:
+
+```bash
+docker compose up --build
+```
+
+Open **http://127.0.0.1:5050** when the `web` container reports that the page
+is ready. The first start imports the OSM extract and creates the schemas and
+indexes; later starts reuse the named `postgres_data` volume and skip completed
+steps. `Ctrl+C` stops the containers.
+
+The Compose defaults are suitable for local development:
+
+| Setting | Default |
+|---|---|
+| Web page | `http://127.0.0.1:5050` |
+| Published PostgreSQL port | `127.0.0.1:5433` |
+| Database | `mumbai_spatial_db` |
+| Database user | `mumbai` |
+| Web database role | `mumbai_web` (read-only) |
+
+To change the development credentials or host ports, copy `.env.example` to
+`.env` before starting Compose. The `.env` file is ignored by Git. For example,
+`WEB_PORT=8080 docker compose up --build` publishes the page on port 8080.
+
+Useful Docker commands:
+
+```bash
+docker compose exec web ./scripts/psql.sh -f queries/03_distance_queries.sql
+docker compose exec web ./scripts/run_queries.sh
+docker compose down                 # stop containers, retain database volume
+docker compose down -v              # stop containers and reset the database
+```
+
+The native `./scripts/run_web.sh` workflow remains unchanged. Inside Compose,
+the same script is used by the web container with `DB_EXTERNAL=1`, so it waits
+for the PostGIS service instead of creating a second PostgreSQL cluster.

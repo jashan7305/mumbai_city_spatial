@@ -1,4 +1,5 @@
 .DS_Store
+.env
 # OSM extracts: the final 20 MB Mumbai extract is committed for reproducibility
 # (ODbL, see README). The intermediate buffer and partial downloads are not.
 data/raw/*.osm.pbf

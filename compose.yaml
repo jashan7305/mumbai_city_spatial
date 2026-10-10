@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-mumbai_spatial_db}
+      POSTGRES_USER: ${POSTGRES_USER:-mumbai}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-mumbai_dev_password}
+    ports:
+      - "${DB_PUBLISHED_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_EXTERNAL: "1"
+      DOCKERIZED: "1"
+      DB_NAME: ${POSTGRES_DB:-mumbai_spatial_db}
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_USER: ${POSTGRES_USER:-mumbai}
+      DB_SSLMODE: disable
+      PGPASSWORD: ${POSTGRES_PASSWORD:-mumbai_dev_password}
+      WEB_DB_PASSWORD: ${WEB_DB_PASSWORD:-mumbai_web_dev_password}
+      WEB_HOST: 0.0.0.0
+      WEB_PORT: "5050"
+    ports:
+      - "${WEB_PORT:-5050}:5050"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:5050/ >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  postgres_data:

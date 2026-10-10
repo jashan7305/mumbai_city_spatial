@@ -32,14 +32,19 @@ if [[ "$IMPORTED" == "t" && "${1:-}" != "--replace" ]]; then
 fi
 psql_project -c 'DROP SCHEMA IF EXISTS raw_osm CASCADE; CREATE SCHEMA raw_osm;'
 
-osm2pgsql \
+# osm2pgsql 1.8 (included by Debian Bookworm) does not have the newer
+# --schema option. PostgreSQL applies this search_path to every connection
+# osm2pgsql opens, so its classic output is still created in raw_osm.
+IMPORT_PGOPTIONS="${PGOPTIONS:-}"
+[[ -n "$IMPORT_PGOPTIONS" ]] && IMPORT_PGOPTIONS+=" "
+IMPORT_PGOPTIONS+="-c search_path=raw_osm,public"
+PGOPTIONS="$IMPORT_PGOPTIONS" osm2pgsql \
   --create \
   --slim \
   --drop \
   --output=pgsql \
   --style="$STYLE" \
   --hstore-all \
-  --schema=raw_osm \
   --cache="$IMPORT_CACHE_MB" \
   --number-processes="$IMPORT_PROCESSES" \
   --database="$DB_NAME" \

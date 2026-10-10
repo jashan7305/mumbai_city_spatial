@@ -24,14 +24,27 @@ fi
 
 # (Re)create the read-only role and its grants (idempotent).
 psql_project -q -f "${PROJECT_ROOT}/sql/04_web_readonly_role.sql"
-
-VENV="${PROJECT_ROOT}/frontend/.venv"
-if [[ ! -x "${VENV}/bin/python" ]]; then
-  python3 -m venv "$VENV"
+if [[ "${DB_EXTERNAL:-0}" == "1" && -n "${WEB_DB_PASSWORD:-}" ]]; then
+  psql_project -v web_password="$WEB_DB_PASSWORD" -f - <<'SQL'
+ALTER ROLE mumbai_web PASSWORD :'web_password';
+SQL
 fi
-"${VENV}/bin/pip" install -q -r "${PROJECT_ROOT}/frontend/requirements.txt"
+
+if [[ "${DOCKERIZED:-0}" == "1" ]]; then
+  PYTHON_BIN="${PYTHON_BIN:-python3}"
+else
+  VENV="${PROJECT_ROOT}/frontend/.venv"
+  if [[ ! -x "${VENV}/bin/python" ]]; then
+    python3 -m venv "$VENV"
+  fi
+  "${VENV}/bin/pip" install -q -r "${PROJECT_ROOT}/frontend/requirements.txt"
+  PYTHON_BIN="${VENV}/bin/python"
+fi
 
 export PGUSER=mumbai_web            # the app never connects as the superuser
+if [[ "${DB_EXTERNAL:-0}" == "1" && -n "${WEB_DB_PASSWORD:-}" ]]; then
+  export PGPASSWORD="$WEB_DB_PASSWORD"
+fi
 export WEB_PORT="${WEB_PORT:-5050}"
 printf 'Open http://127.0.0.1:%s  (Ctrl+C to stop)\n' "$WEB_PORT"
-exec "${VENV}/bin/python" "${PROJECT_ROOT}/frontend/app.py"
+exec "$PYTHON_BIN" "${PROJECT_ROOT}/frontend/app.py"

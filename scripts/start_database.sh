@@ -11,6 +11,18 @@
 set -euo pipefail
 source "$(dirname "$0")/common.sh"
 
+if [[ "${DB_EXTERNAL:-0}" == "1" ]]; then
+  for _ in $(seq 1 60); do
+    if "$PG_ISREADY_BIN" -h "$PGHOST" -p "$PGPORT" -d postgres >/dev/null 2>&1; then
+      printf 'External PostgreSQL service is accepting connections on %s:%s.\n' "$PGHOST" "$PGPORT"
+      exit 0
+    fi
+    sleep 1
+  done
+  printf 'External PostgreSQL service did not become ready at %s:%s.\n' "$PGHOST" "$PGPORT" >&2
+  exit 1
+fi
+
 PG_CTL="${PG_BIN}/pg_ctl"
 INITDB="${PG_BIN}/initdb"
 PGDATA="${PROJECT_ROOT}/data/pgdata"

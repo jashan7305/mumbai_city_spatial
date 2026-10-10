@@ -10,6 +10,11 @@ set -euo pipefail
 PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PGDATA="${PROJECT_ROOT}/data/pgdata"
 
+if [[ "${DB_EXTERNAL:-0}" == "1" ]]; then
+  printf 'The database is managed by the external PostgreSQL service; use docker compose down -v to reset it.\n'
+  exit 0
+fi
+
 if [[ ! -d "$PGDATA" ]]; then
   printf 'Nothing to reset: %s does not exist.\n' "$PGDATA"
   exit 0
