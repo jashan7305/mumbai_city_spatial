@@ -32,6 +32,6 @@ fi
 "${VENV}/bin/pip" install -q -r "${PROJECT_ROOT}/frontend/requirements.txt"
 
 export PGUSER=mumbai_web            # the app never connects as the superuser
-export WEB_PORT="${WEB_PORT:-5050}"
+export WEB_PORT="${WEB_PORT:-8002}"
 printf 'Open http://127.0.0.1:%s  (Ctrl+C to stop)\n' "$WEB_PORT"
 exec "${VENV}/bin/python" "${PROJECT_ROOT}/frontend/app.py"
