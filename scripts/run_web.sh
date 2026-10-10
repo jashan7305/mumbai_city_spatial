@@ -42,9 +42,6 @@ else
 fi
 
 export PGUSER=mumbai_web            # the app never connects as the superuser
-if [[ "${DB_EXTERNAL:-0}" == "1" && -n "${WEB_DB_PASSWORD:-}" ]]; then
-  export PGPASSWORD="$WEB_DB_PASSWORD"
-fi
 export WEB_PORT="${WEB_PORT:-5050}"
 printf 'Open http://127.0.0.1:%s  (Ctrl+C to stop)\n' "$WEB_PORT"
 exec "$PYTHON_BIN" "${PROJECT_ROOT}/frontend/app.py"
